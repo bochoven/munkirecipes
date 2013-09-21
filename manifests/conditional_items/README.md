@@ -10,3 +10,12 @@ These key/value pairs are machine specific and can be used to test for certain c
 The scripts in this directory contain little pieces of code that provide you with custom keys that you can use to enhance your manifests.
 
 Each script has a Usage: paragraph that demonstrates how the condition should be used in the manifest.
+
+Writing conditional scripts
+---------------------------
+
+* Please use the `template_condition.sh` script to write a new script. 
+* Make sure your keys are unique (check the other scripts).
+* Give good examples of how to use your custom condition variable.
+
+If you have a nice conditional script that you want to share, please fork and send a pull-request.
