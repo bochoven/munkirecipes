@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# This condition_script supplies two variables: 
+# This condition_script supplies one variable: 
 # at_loginwindow (boolean): TRUE when no user logged in, FALSE when a user is logged in
 
 # Usage:
