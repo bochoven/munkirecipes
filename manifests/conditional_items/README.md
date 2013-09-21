@@ -11,11 +11,17 @@ The scripts in this directory contain little pieces of code that provide you wit
 
 Each script has a Usage: paragraph that demonstrates how the condition should be used in the manifest.
 
+More efficient
+--------------
+
+The easiest wat is to add separate scripts to the `conditions` directory, but if you care about efficiency, you could merge them together so the client only has to write to the `ConditionalItems.plis` once
+
 Writing conditional scripts
 ---------------------------
 
-* Please use the `template_condition.sh` script to write a new script. 
+* Please use/take a look at the `template_condition.sh` script before you write a new script. 
 * Make sure your keys are unique (check the other scripts).
 * Give good examples of how to use your custom condition variable.
+* End your script with _condition so it is clear this is a conditional script.
 
 If you have a nice conditional script that you want to share, please fork and send a pull-request.
