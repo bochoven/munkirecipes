@@ -24,7 +24,7 @@ plist_loc="$managedinstalldir/ConditionalItems"
 # Check if there is a console user
 at_loginwindow='false'
 # If there is no console user, set at_loginwindow to 'true'
-$(test -z "$(w | awk '$2 ~ /console/')") && at_loginwindow='true'
+$(test "$(ls -la /dev/console | awk '{print $3}')" = 'root') && at_loginwindow='true'
 
 # Write key/value pair to ConditionalItems.plist
 defaults write "$plist_loc" "at_loginwindow" -bool $at_loginwindow
