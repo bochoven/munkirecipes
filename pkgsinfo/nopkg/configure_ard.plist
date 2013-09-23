@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+	<string>production</string>
+	</array>
+	<key>description</key>
+	<string>Configure Apple Remote Desktop (VNC server is disabled).</string>
+	<key>installcheck_script</key>
+	<string>
+#!/bin/sh
+
+# Admin user account
+admin_user='mac_sys_admin'
+
+# Check if ARD_AllLocalUsers is set, if not, install 
+if [ ! $(defaults read /Library/Preferences/com.apple.RemoteManagement ARD_AllLocalUsers) ]; then
+	exit 0; 
+fi 
+# Check if ARD_AllLocalUsers is zero, if not, install
+if [ $(defaults read /Library/Preferences/com.apple.RemoteManagement ARD_AllLocalUsers) != 0 ]; then
+	exit 0; 
+fi 
+# Check if correct naprivs exist in macsys, if not, install
+if [ "$(dscl . read /Users/$admin_user naprivs)" != 'dsAttrTypeNative:naprivs: -2147483395' ]; then
+	exit 0;
+fi 
+# All is fine, no install necessary 
+exit 1;
+	</string>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.7.0</string>
+	<key>name</key>
+	<string>ard_setup</string>
+	<key>preinstall_script</key>
+	<string>#!/bin/sh
+
+# Admin user account
+admin_user='mac_sys_admin'
+
+KICKSTART='/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart'
+
+# Set kickstart options -ControlObserve and -ObserveOnly are off
+# use -privs -all to give user all privileges
+$KICKSTART -configure -users $admin_user -access -on -privs -DeleteFiles -TextMessages -OpenQuitApps -GenerateReports -RestartShutDown -SendFiles -ChangeSettings
+
+# Disable access for other users 
+$KICKSTART -configure -allowAccessFor -specifiedUsers -restart -agent -menu
+	</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>uninstall_method</key>
+	<string>uninstall_script</string>
+	<key>uninstall_script</key>
+	<string>
+#!/bin/sh 
+
+# Admin user account
+admin_user='mac_sys_admin'
+
+KICKSTART='/System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart'
+
+# Remove user access and privileges
+$KICKSTART -configure -users $admin_user -access -off -privs -none
+
+# Disable ARD
+$KICKSTART -deactivate -stop exit 0
+	</string>
+	<key>uninstallable</key>
+	<true/>
+	<key>version</key>
+	<string>1.0.0</string>
+</dict>
