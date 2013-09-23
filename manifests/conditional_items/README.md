@@ -14,7 +14,7 @@ Each script has a Usage: paragraph that demonstrates how the condition should be
 More efficient
 --------------
 
-The easiest wat is to add separate scripts to the `conditions` directory, but if you care about efficiency, you could merge them together so the client only has to write to the `ConditionalItems.plis` once
+The easiest wat is to add separate scripts to the `conditions` directory, but if you care about efficiency, you could merge them together so the client only has to write to the `ConditionalItems.plist` once
 
 Writing conditional scripts
 ---------------------------
