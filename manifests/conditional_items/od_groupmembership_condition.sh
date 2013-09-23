@@ -8,21 +8,31 @@
 # Credit: Mike Pullen
 
 # Usage:
-# You need to set up your OD/LDAP with computergroups which represent
-# an application/package/group. 
-# To assign a certain application/package to a machine, make the machine member
-# of that group.
-# To have awesome_package install only when machine is member of group
-# use the following condition:
+# -- Create OD/LDAP policy group which represent applications/packages/groups.
+#     For example:
+#	-pol_comp_munkiapp_MSOffice
+#
+# -- Create manifests for applications/packages/groups:
+#     For example:
+#       create a manifest name "__app_MSOffice" defining MSOffice for installation
+#
+# -- Assign applications/packages to machines by making those machines members of those groups.
+#     == Nested Group Membership must be enabled 
+# 
+# To have the manifest "__app_MSOffice" install only when a machine is member
+# of the group "-pol_comp_munkiapp_MSOffice" use the following condition:
 #
 # <dict>
 #	<key>condition</key>
-#	<string>awesome_package_app IN assignedapps</string>
+#	<string>munkiapp_MSOffice IN assignedapps</string>
 #	<key>managed_installs</key>
 #	<array>
-#		<string>awesome_package</string>
+#		<string>__app_MSOffice</string>
 #	</array>
 #</dict>
+#
+#
+
 
 # Read the location of the ManagedInstallDir from ManagedInstall.plist
 managedinstalldir="$(defaults read /Library/Preferences/ManagedInstalls ManagedInstallDir)"
