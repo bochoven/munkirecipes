@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This condition_script supplies: 
-# assignedapps (array): list of OD groups this machine is a member of
+# assignedapps (array): list of OD groups of which this machine is a member
 # Requirements:
 # Install dsgrouputil in /usr/local/bin
 # dsgrouputil is available from https://github.com/jatoben/dsgrouputil
@@ -9,25 +9,27 @@
 
 # Usage:
 # -- Create OD/LDAP policy group which represent applications/packages/groups.
+# --- following a namingscheme like "munkiapp_$appname" will keep policies sorted
+#        and make querying policies quicker. 
 #     For example:
 #	-pol_comp_munkiapp_MSOffice
+#	-pol_comp_munkiapp_adobecs5
 #
 # -- Create manifests for applications/packages/groups:
 #     For example:
-#       create a manifest name "__app_MSOffice" defining MSOffice for installation
+#       create a manifest named "_app_MSOffice" defining MSOffice for installation
 #
 # -- Assign applications/packages to machines by making those machines members of those groups.
-#     == Nested Group Membership must be enabled 
 # 
-# To have the manifest "__app_MSOffice" install only when a machine is member
-# of the group "-pol_comp_munkiapp_MSOffice" use the following condition:
+# -- To have the manifest "_app_MSOffice" install when a machine is member
+#       of the group "-pol_comp_munkiapp_MSOffice" use the following condition:
 #
 # <dict>
 #	<key>condition</key>
-#	<string>munkiapp_MSOffice IN assignedapps</string>
-#	<key>managed_installs</key>
+#	<string>ANY assignedapps CONTAINS 'MSOffice'</string>
+#	<key>included_manifests</key>
 #	<array>
-#		<string>__app_MSOffice</string>
+#		<string>_app_MSOffice</string>
 #	</array>
 #</dict>
 #
@@ -43,14 +45,19 @@ plist_loc="$managedinstalldir/ConditionalItems"
 dsgu="/usr/local/bin/dsgrouputil"
 
 # Gather list of all computer groups.
-appgroups=$( dscl /Search -list /ComputerGroups )
+## If using a standardized naming scheme for munki app policy groups, the 'for' loop
+##   will be quicker if $appgroups only includes munki app groups! For example:
+##
+##      appgroups=$( dscl /Search -list /ComputerGroups | grep munkiapp )
+##
+appgroups=$( dscl /Search -list /ComputerGroups ) 
 
 # Build list of assigned applications by querying group membership of current computer 
 for app in $appgroups
 do
 	if $dsgu -q 1 -o checkmember -t computer -currentHost 1 -g $app; then
 		assignedapps+=( $app )
-		echo $assignedapps
+#		echo $assignedapps
 	fi
 done
 
