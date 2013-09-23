@@ -2,6 +2,9 @@
 
 # This condition_script supplies: 
 # assignedapps (array): list of OD groups this machine is a member of
+# Requirements:
+# Install dsgrouputil in /usr/local/bin
+# dsgrouputil is available from https://github.com/jatoben/dsgrouputil
 # Credit: Mike Pullen
 
 # Usage:
@@ -26,7 +29,7 @@ managedinstalldir="$(defaults read /Library/Preferences/ManagedInstalls ManagedI
 # Make sure we're outputting our information to "ConditionalItems.plist" (plist is left off since defaults requires this)
 plist_loc="$managedinstalldir/ConditionalItems"
 
-# define where dsgrouputil is installed. dsgrouputil is available from https://github.com/jatoben/dsgrouputil
+# define where dsgrouputil is installed.
 dsgu="/usr/local/bin/dsgrouputil"
 
 # Gather list of all computer groups.
