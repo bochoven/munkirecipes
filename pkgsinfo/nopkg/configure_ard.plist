@@ -6,13 +6,14 @@
 	<false/>
 	<key>catalogs</key>
 	<array>
-	<string>production</string>
-	</array>
+		<string>production</string>
+	</array>	
 	<key>description</key>
 	<string>Configure Apple Remote Desktop (VNC server is disabled).</string>
 	<key>installcheck_script</key>
 	<string>
 #!/bin/sh
+# Author: Arjen van Bochoven
 
 # Admin user account
 admin_user='mac_sys_admin'
