@@ -1,8 +1,9 @@
 #!/bin/sh
+# Author: Tim Sutton
+# Modified by: Arjen van Bochoven
 
 # This condition_script supplies: 
 # local_users (array): List of local usernames (not the _* accounts)
-# Credit: Tim Sutton
 
 # Usage:
 # To have awesome_package install only when 

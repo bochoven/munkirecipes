@@ -1,11 +1,11 @@
 #!/bin/sh
+# Author: Mike Pullen
 
 # This condition_script supplies: 
 # assignedapps (array): list of OD groups of which this machine is a member
 # Requirements:
 # Install dsgrouputil in /usr/local/bin
 # dsgrouputil is available from https://github.com/jatoben/dsgrouputil
-# Credit: Mike Pullen
 
 # Usage:
 # -- Create OD/LDAP policy group which represent applications/packages/groups.
