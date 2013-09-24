@@ -1,7 +1,7 @@
 munkirecipes
 ============
 
-<img src="assets/monkey-25339_640.png" style="float: right; width: 50%; height: auto:">
+<img src="assets/monkey-25339_150.png">
 
 A collection of scripts to enhance munki.
 
