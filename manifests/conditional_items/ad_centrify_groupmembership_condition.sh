@@ -11,43 +11,33 @@
 
 # Usage:
 # To have awesome_package install only when this machine is a member of 
-# the 'awesome_package_group' use the following condition:
+# the 'awesome_computers' AD group use the following condition:
 #
-# <dict>
-#	<key>condition</key>
-#	<string>awesome_package_group IN adcomputer_groups</string>
-#	<key>managed_installs</key>
-#	<array>
-#		<string>awesome_package</string>
-#	</array>
-#</dict>
+#
+# (case and diacritic insensitive)
+# <key>conditional_items</key>
+# <array>
+# 	<dict>
+#		<key>condition</key>
+#		<string>ANY adcomputer_groups MATCHES[cd] 'awesome_computers'</string>
+#		<key>managed_installs</key>
+#		<array>
+#			<string>awesome_package</string>
+#		</array>
+#	</dict>
+# </array>
 
-# Read the location of the ManagedInstallDir from ManagedInstall.plist
-managedinstalldir="$(defaults read /Library/Preferences/ManagedInstalls ManagedInstallDir)"
-# Make sure we're outputting our information to "ConditionalItems.plist" (plist is left off since defaults requires this)
-plist_loc="$managedinstalldir/ConditionalItems"
-
-NAME="$(echo `sudo systemsetup -getcomputername | cut -d: -f2-`)"
+computer_name="$(echo `sudo systemsetup -getcomputername | cut -d: -f2-`)"
 current_user="$(ls -la /dev/console | awk '{print $3}')"
 
-ADuser_groups="$(adquery user "$current_user" -a 2>/dev/null | sed -e 's/^.*\///g' | tr '\n' ',')"
-ADcomputer_groups="$(adquery user "$NAME" -a 2>/dev/null | sed -e 's/^.*\///g' | tr '\n' ',')"
-
 IFS=$'\n'
+aduser_groups=($(adquery user "$current_user" -a 2>/dev/null | sed -e 's/^.*\///g'))
+adcomputer_groups=($(adquery user "$computer_name" -a 2>/dev/null | sed -e 's/^.*\///g'))
+plist_loc="/Library/Managed Installs/ConditionalItems"
 
-for aduser_group in `adquery user "$current_user" -a 2>/dev/null | sed -e 's/^.*\///g'`; do
-	aduser_groups+=( $aduser_group )
-done
 
 defaults write "$plist_loc" "aduser_groups" -array "${aduser_groups[@]}"
-
-for adcomputer_group in `adquery user "$NAME" -a 2>/dev/null | sed -e 's/^.*\///g'`; do
-	adcomputer_groups+=( $adcomputer_group )
-done
-
 defaults write "$plist_loc" "adcomputer_groups" -array "${adcomputer_groups[@]}"
-
-# CRITICAL! Since 'defaults' outputs a binary plist, we need to ensure that munki can read it by converting it to xml
 plutil -convert xml1 "$plist_loc".plist
 
 exit 0
